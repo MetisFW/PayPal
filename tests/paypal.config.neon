@@ -1,0 +1,13 @@
+payPal:
+  clientId: AUqne4ywvozUaSQ1THTZYKFr88bhtA0SS_fXBoJTfeSTIasDBWuXLiLcFlfmSXRfL-kZ3Z5shvNrT6rP
+  secret: EDGPDc3a65JBBY7-IKkNak7aGTVTvY-NhJgfhptegSML58fWjfp89U7UKNgGk9UI-UEZ-btfaE2sGST1
+  currency: EUR
+  sdkConfig:
+    mode: sandbox
+    log.Enabled: true
+    log.FileName: './tmp/PayPal.log'
+    log.LogLevel: DEBUG
+    validation.level: log
+    cache.enabled: true
+    # 'http.CURLOPT_CONNECTTIMEOUT' => 30
+    # 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'/

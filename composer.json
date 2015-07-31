@@ -1,0 +1,48 @@
+{
+  "name": "metisfw/paypal",
+  "type": "library",
+  "description": "PayPal SDK integration for Nette Framework",
+  "keywords": [
+    "nette",
+    "paypal",
+    "pay",
+    "checkout",
+    "payment"
+  ],
+  "homepage": "https://github.com/MetisFW",
+  "license": [
+    "BSD-3-Clause",
+    "GPL-2.0",
+    "GPL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "GrowJOB s.r.o",
+      "email": "dev@growjob.com"
+    },
+    {
+      "name": "Hynek Vilímek",
+      "email": "h.vilimek@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "nette/nette": "~2.3",
+    "paypal/rest-api-sdk-php": "1.5.*"
+  },
+  "require-dev": {
+    "nette/tester": "@dev",
+    "mockery/mockery": "^0.9.4"
+  },
+  "support": {
+    "email": "dev@growjob.com",
+    "issues": "https://github.com/MetisFW/PayPal/issues"
+  },
+  "autoload": {
+    "psr-0": {
+      "MetisFW\\PayPal\\": "src/"
+    }
+  }
+}
