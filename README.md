@@ -54,6 +54,21 @@ payPal:
 sdkConfig is config to [paypal/PayPal-PHP-SDK](https://github.com/paypal/PayPal-PHP-SDK)
 see [sdk-config-sample](https://github.com/paypal/PayPal-PHP-SDK/blob/master/sample/sdk_config.ini)
 
+Usage
+------------
+1) Create instance `\MetisFW\PayPal\Payment\PlainPaymentOperation`, `\MetisFW\PayPal\Payment\SimplePaymentOperation`, 
+   own descendant of `\MetisFW\PayPal\Payment\BasePaymentOperation` or implement `MetisFW\PayPal\PaymentOperation` 
+2) Pass on created instances of `\PayPal\Api\Transaction` to them.
+3) Create component `\MetisFW\PayPal\UI\PaymentControl` and pass on the operation
+4) For customizing default template 
+ - call `setTemplateFilePath` and set different control template
+ - use attributes in parent template
+  ```
+  {var attributes = array('class' => 'paypal-payment-button')}
+  {control payPalPaymentButton $attributes, 'Pay Now'}
+  ```
+`
+
 -----
 
 Homepage [MetisFW](https://github.com/MetisFW) and repository [MetisFW/PayPal](https://github.com/MetisFW/PayPal).
