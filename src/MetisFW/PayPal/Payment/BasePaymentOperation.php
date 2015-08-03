@@ -8,6 +8,7 @@ use Nette\Object;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
 use PayPal\Api\PaymentExecution;
+use PayPal\Api\Transaction;
 use PayPal\Exception\PayPalConfigurationException;
 use PayPal\Exception\PayPalConnectionException;
 use PayPal\Exception\PayPalInvalidCredentialException;
@@ -54,6 +55,7 @@ abstract class BasePaymentOperation extends Object implements PaymentOperation {
       ->setPayer($payer);
 
     $transactions = $this->getTransactions();
+    $this->checkTransactions($transactions);
     $payment->setTransactions($transactions);
 
     return $payment;
@@ -117,6 +119,20 @@ abstract class BasePaymentOperation extends Object implements PaymentOperation {
     }
 
     return $exception;
+  }
+
+  /**
+   * @param array $transactions
+   *
+   * @throws \LogicException throws when some item from array is not instance of \PayPal\Api\Transaction
+   */
+  protected function checkTransactions(array $transactions) {
+    foreach($transactions as $transaction) {
+      if(!$transaction instanceof Transaction) {
+        throw new \LogicException('Expect array of \PayPal\Api\Transaction instances but instance of '.
+          gettype($transaction).' given');
+      }
+    }
   }
 
 }
