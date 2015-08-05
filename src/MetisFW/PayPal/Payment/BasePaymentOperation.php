@@ -115,7 +115,10 @@ abstract class BasePaymentOperation extends Object implements PaymentOperation {
       $exception instanceof PayPalMissingCredentialException ||
       $exception instanceof PayPalConnectionException
     ) {
-      return new PayPalException($exception->getMessage(), $exception->getCode(), $exception);
+      return new PayPalException(
+        $exception->getMessage().'Data: '.$exception->getData(),
+        $exception->getCode(),
+        $exception);
     }
 
     return $exception;

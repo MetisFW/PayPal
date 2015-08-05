@@ -2,6 +2,9 @@
 
 namespace MetisFWTests\PayPal\Payment;
 
+use MetisFW\PayPal\Helper\TransactionHelper;
+use MetisFW\PayPal\Payment\PlainPaymentOperation;
+use MetisFW\PayPal\Payment\SimplePaymentOperation;
 use MetisFW\PayPal\PayPalContext;
 use Mockery\MockInterface;
 use PayPal\Api\Payment;
@@ -13,6 +16,7 @@ use Tester\TestCase;
 
 require_once __DIR__.'/../../bootstrap.php';
 require_once 'DummyPaymentOperation.php';
+require_once __DIR__.'/../Helper/TransactionHelper.php';
 
 class PaymentOperationTest extends TestCase {
 
@@ -44,7 +48,6 @@ class PaymentOperationTest extends TestCase {
     Assert::equal('123456789', $payment->transactions[0]->invoice_number);
   }
 
-
   public function testCreatePayment() {
     $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
     $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
@@ -58,6 +61,52 @@ class PaymentOperationTest extends TestCase {
     $payment->setRedirectUrls($redirectUrls);
 
     $result = $operation->createPayment($payment);
+    Assert::equal('created', $result->getState());
+    Assert::notEqual(null, $result->getApprovalLink());
+  }
+
+  public function testCreatePaymentSimpleOperation() {
+    $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
+    $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
+    $context = new PayPalContext($apiContext);
+    $context->setCurrency('CZK');
+    $operation = new SimplePaymentOperation($context, "Coffee", 10);
+    $payment = $operation->getPayment();
+
+    $redirectUrls = new RedirectUrls();
+    $redirectUrls->setReturnUrl('http://localhost/return');
+    $redirectUrls->setCancelUrl('http://localhost/cancel');
+    $payment->setRedirectUrls($redirectUrls);
+
+    $result = $operation->createPayment($payment);
+    Assert::equal('created', $result->getState());
+    Assert::notEqual(null, $result->getApprovalLink());
+  }
+
+  public function testCreatePaymentPlainPaymentOperation() {
+    $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
+    $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
+    $context = new PayPalContext($apiContext);
+
+    $item = TransactionHelper::createItem('Coffee', 'EUR', 2, '#123', 20);
+    $itemList = TransactionHelper::createItemList(array($item));
+    $details = TransactionHelper::createDetails(1, 2, 40);
+    $amount = TransactionHelper::createAmount($details, 43, 'EUR');
+    $invoiceNumber = '123456789';
+    $description = 'The best coffee ever';
+    $transaction = TransactionHelper::createTransaction($amount, $itemList, $invoiceNumber, $description);
+
+    $plainOperation = new PlainPaymentOperation($context, array($transaction));
+    /** @var Payment $payment */
+    $payment = $plainOperation->getPayment();
+
+    $redirectUrls = new RedirectUrls();
+    $redirectUrls->setReturnUrl('http://localhost/return');
+    $redirectUrls->setCancelUrl('http://localhost/cancel');
+    $payment->setRedirectUrls($redirectUrls);
+
+    /** @var Payment $result */
+    $result = $plainOperation->createPayment($payment);
     Assert::equal('created', $result->getState());
     Assert::notEqual(null, $result->getApprovalLink());
   }
