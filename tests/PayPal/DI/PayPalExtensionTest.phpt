@@ -3,6 +3,8 @@
 namespace MetisFWTests\PayPal\DI;
 
 use MetisFW\PayPal\DI\PayPalExtension;
+use MetisFW\PayPal\Payment\PlainPaymentOperation;
+use MetisFW\PayPal\Payment\SimplePaymentOperation;
 use Nette\Configurator;
 use Tester\Assert;
 use Tester\TestCase;
@@ -22,6 +24,14 @@ class PayPalExtensionTest extends TestCase {
     $paypal = $container->getByType('MetisFW\PayPal\PayPalContext');
 
     Assert::notEqual(null, $paypal);
+
+    $simpleOperationFactory = $container->getByType('MetisFW\PayPal\Payment\SimplePaymentOperationFactory');
+    $operation = $simpleOperationFactory->create('Coffee', 10);
+    Assert::true($operation instanceof SimplePaymentOperation);
+
+    $plainOperationFactory = $container->getByType('MetisFW\PayPal\Payment\PlainPaymentOperationFactory');
+    $operation = $plainOperationFactory->create(array());
+    Assert::true($operation instanceof PlainPaymentOperation);
   }
 
 }

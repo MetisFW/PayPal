@@ -24,6 +24,12 @@ class PayPalExtension extends CompilerExtension {
     Validators::assertField($config, 'secret');
     Validators::assertField($config, 'sdkConfig', 'array');
 
+    $builder->addDefinition($this->prefix('simplePaymentOperationFactory'))
+      ->setImplement('MetisFW\PayPal\Payment\SimplePaymentOperationFactory');
+
+    $builder->addDefinition($this->prefix('plainPaymentOperationFactory'))
+      ->setImplement('MetisFW\PayPal\Payment\PlainPaymentOperationFactory');
+
     $builder->addDefinition($this->prefix('credentials'))
       ->setClass('PayPal\Auth\OAuthTokenCredential', array($config['clientId'], $config['secret']));
 
