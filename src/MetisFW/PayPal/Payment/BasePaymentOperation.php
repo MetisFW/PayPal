@@ -4,6 +4,7 @@ namespace MetisFW\PayPal\Payment;
 
 use MetisFW\PayPal\PayPalContext;
 use MetisFW\PayPal\PayPalException;
+use Nette\InvalidArgumentException;
 use Nette\Object;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
@@ -42,13 +43,28 @@ abstract class BasePaymentOperation extends Object implements PaymentOperation {
   abstract protected function getTransactions();
 
   /**
+   * @return Payer
+   */
+  protected function getPayer() {
+    $payer = new Payer();
+    return $payer;
+  }
+
+  /**
    * @see http://paypal.github.io/PayPal-PHP-SDK/sample/doc/payments/CreatePaymentUsingPayPal.html
    *
    * @return Payment
    */
   public function getPayment() {
-    $payer = new Payer();
-    $payer->setPaymentMethod('paypal');
+    $payer = $this->getPayer();
+    if(!$payer || !($payer instanceof Payer)) {
+      throw new InvalidArgumentException("Method getPayer has to return instance of Payer. Instead ".
+        gettype($payer)." given.");
+    }
+
+    if(!$payer->getPaymentMethod()) {
+      $payer->setPaymentMethod('paypal');
+    }
 
     $payment = new Payment();
     $payment->setIntent("sale")
