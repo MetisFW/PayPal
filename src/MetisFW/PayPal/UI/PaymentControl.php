@@ -85,7 +85,10 @@ class PaymentControl extends Control {
   }
 
   public function setTemplateFilePath($templateFilePath) {
-    $this->setTemplateFilePath($templateFilePath);
+    $this->templateFilePath = $templateFilePath;
+  }
+  public function getTemplateFilePath() {
+    return $this->templateFilePath ? $this->templateFilePath : $this->getDefaultTemplateFilePath();
   }
 
   /**
@@ -94,7 +97,7 @@ class PaymentControl extends Control {
    */
   public function render($attrs = array(), $text = "Pay") {
     $template = $this->template;
-    $templateFilePath = ($this->templateFilePath ? $this->templateFilePath : $this->getDefaultTemplateFilePath());
+    $templateFilePath = $this->getTemplateFilePath();
     $template->setFile($templateFilePath);
     $template->checkoutLink = $this->link('//checkout!');
     $template->text = $text;
