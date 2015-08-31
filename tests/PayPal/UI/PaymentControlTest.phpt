@@ -67,6 +67,12 @@ class PaymentControlTest extends TestCase {
     $this->control->handleCancel();
   }
 
+  public function testSetup() {
+    Assert::same($this->control->getTemplateFilePath(), $this->control->getDefaultTemplateFilePath());
+    $this->control->setTemplateFilePath('/foo/path.latte');
+    Assert::same($this->control->getTemplateFilePath(), $this->control->templateFilePath);
+  }
+
   /**
    * This method is called after a test is executed.
    *
