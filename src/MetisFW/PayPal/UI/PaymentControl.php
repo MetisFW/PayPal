@@ -31,7 +31,7 @@ class PaymentControl extends Control {
   public $onSuccess = array();
 
   /**
-   * @var array of callbacks, signature: function(AccountBasedPayPalControl $control, array $response)
+   * @var array of callbacks, signature: function(AccountBasedPayPalControl $control)
    */
   public $onCancel = array();
 
