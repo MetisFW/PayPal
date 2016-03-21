@@ -5,6 +5,7 @@ namespace MetisFWTests\PayPal\DI;
 use MetisFW\PayPal\DI\PayPalExtension;
 use MetisFW\PayPal\Payment\PlainPaymentOperation;
 use MetisFW\PayPal\Payment\SimplePaymentOperation;
+use MetisFW\PayPal\PayPalContext;
 use Nette\Configurator;
 use Tester\Assert;
 use Tester\TestCase;
@@ -21,6 +22,7 @@ class PayPalExtensionTest extends TestCase {
     $config->addConfig(__DIR__.'/../../paypal.config.neon');
 
     $container = $config->createContainer();
+    /** @var PayPalContext $paypal */
     $paypal = $container->getByType('MetisFW\PayPal\PayPalContext');
 
     Assert::notEqual(null, $paypal);
@@ -32,6 +34,8 @@ class PayPalExtensionTest extends TestCase {
     $plainOperationFactory = $container->getByType('MetisFW\PayPal\Payment\PlainPaymentOperationFactory');
     $operation = $plainOperationFactory->create(array());
     Assert::true($operation instanceof PlainPaymentOperation);
+
+    Assert::true($paypal->isGaTrackingEnabled());
   }
 
 }

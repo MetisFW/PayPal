@@ -13,6 +13,9 @@ class PayPalContext extends Object {
   /** @var string */
   private $currency;
 
+  /** @var bool */
+  private $gaTrackingEnabled;
+
   /**
    * @param string $clientId
    * @param string $secret
@@ -47,6 +50,20 @@ class PayPalContext extends Object {
    */
   public function getApiContext() {
     return $this->apiContext;
+  }
+
+  /**
+   * @param bool $value
+   */
+  public function setGaTrackingEnabled($value) {
+    $this->gaTrackingEnabled = $value;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isGaTrackingEnabled() {
+    return $this->gaTrackingEnabled;
   }
 
 }

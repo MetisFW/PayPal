@@ -62,6 +62,27 @@ class PaymentOperationTest extends TestCase {
 
     $result = $operation->createPayment($payment);
     Assert::equal('created', $result->getState());
+    Assert::equal('http://localhost/return', $payment->getRedirectUrls()->getReturnUrl());
+    Assert::notEqual(null, $result->getApprovalLink());
+  }
+
+  public function testCreatePaymentGaTracking() {
+    $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
+    $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
+    $context = new PayPalContext($apiContext);
+    $context->setGaTrackingEnabled(true);
+
+    $operation = new DummyPaymentOperation($context);
+    $payment = $operation->getPayment();
+
+    $redirectUrls = new RedirectUrls();
+    $redirectUrls->setReturnUrl('http://localhost/return');
+    $redirectUrls->setCancelUrl('http://localhost/cancel');
+    $payment->setRedirectUrls($redirectUrls);
+
+    $result = $operation->createPayment($payment);
+    Assert::equal('created', $result->getState());
+    Assert::equal('http://localhost/return?utm_nooverride=1', $payment->getRedirectUrls()->getReturnUrl());
     Assert::notEqual(null, $result->getApprovalLink());
   }
 

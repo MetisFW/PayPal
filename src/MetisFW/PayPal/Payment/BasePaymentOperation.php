@@ -2,6 +2,7 @@
 
 namespace MetisFW\PayPal\Payment;
 
+use MetisFW\PayPal\Helpers\GaTracking;
 use MetisFW\PayPal\PayPalContext;
 use MetisFW\PayPal\PayPalException;
 use Nette\InvalidArgumentException;
@@ -83,6 +84,10 @@ abstract class BasePaymentOperation extends Object implements PaymentOperation {
    * @return Payment
    */
   public function createPayment(Payment $payment) {
+    if($this->context->isGaTrackingEnabled()) {
+      $payment = GaTracking::addTrackingParameters($payment);
+    }
+
     try {
       return $payment->create($this->context->getApiContext());
     }

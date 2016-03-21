@@ -14,6 +14,7 @@ class PayPalExtension extends CompilerExtension {
    */
   public $defaults = array(
     'currency' => 'CZK',
+    'gaTrackingEnabled' => true
   );
 
   public function loadConfiguration() {
@@ -39,7 +40,8 @@ class PayPalExtension extends CompilerExtension {
     $builder->addDefinition($this->prefix('PayPal'))
       ->setClass('MetisFW\PayPal\PayPalContext', array($this->prefix('@apiContext')))
       ->addSetup('setConfig', array($config['sdkConfig']))
-      ->addSetup('setCurrency', array($config['currency']));
+      ->addSetup('setCurrency', array($config['currency']))
+      ->addSetup('setGaTrackingEnabled', array($config['gaTrackingEnabled']));
   }
 
   /**
