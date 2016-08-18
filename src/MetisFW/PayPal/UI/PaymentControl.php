@@ -51,7 +51,7 @@ class PaymentControl extends Control {
   public function handleCheckout() {
     try {
       $payment = $this->operation->getPayment();
-        if (is_null($payment->getRedirectUrls()) {
+        if (is_null($payment->getRedirectUrls())) {
           $this->setPaymentParameters($payment);
         }
 
