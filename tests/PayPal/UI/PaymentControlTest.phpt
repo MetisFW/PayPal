@@ -69,8 +69,9 @@ class PaymentControlTest extends TestCase {
 
   public function testSetup() {
     Assert::same($this->control->getTemplateFilePath(), $this->control->getDefaultTemplateFilePath());
-    $this->control->setTemplateFilePath('/foo/path.latte');
-    Assert::same($this->control->getTemplateFilePath(), $this->control->templateFilePath);
+    $templateFilePath = '/foo/path.latte';
+    $this->control->setTemplateFilePath($templateFilePath);
+    Assert::same($this->control->getTemplateFilePath(), $templateFilePath);
   }
 
   /**
