@@ -1,3 +1,4 @@
 extension=json.so
 extension=curl.so
 extension=openssl.so
+extension=tokenizer.so
