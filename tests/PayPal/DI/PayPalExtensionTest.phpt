@@ -3,6 +3,7 @@
 namespace MetisFWTests\PayPal\DI;
 
 use MetisFW\PayPal\DI\PayPalExtension;
+use MetisFW\PayPal\Notification\BasicNotificationOperation;
 use MetisFW\PayPal\Payment\PlainPaymentOperation;
 use MetisFW\PayPal\Payment\SimplePaymentOperation;
 use MetisFW\PayPal\PayPalContext;
@@ -36,6 +37,10 @@ class PayPalExtensionTest extends TestCase {
     Assert::true($operation instanceof PlainPaymentOperation);
 
     Assert::true($paypal->isGaTrackingEnabled());
+
+    $notificationOperationFactory = $container->getByType('MetisFW\PayPal\Notification\BasicNotificationOperationFactory');
+    $operation = $notificationOperationFactory->create();
+    Assert::true($operation instanceof BasicNotificationOperation);
   }
 
 }

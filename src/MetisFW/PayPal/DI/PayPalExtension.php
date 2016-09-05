@@ -42,6 +42,9 @@ class PayPalExtension extends CompilerExtension {
       ->addSetup('setConfig', array($config['sdkConfig']))
       ->addSetup('setCurrency', array($config['currency']))
       ->addSetup('setGaTrackingEnabled', array($config['gaTrackingEnabled']));
+
+    $builder->addDefinition($this->prefix('basicNotificationOperationFactory'))
+      ->setImplement('MetisFW\PayPal\Notification\BasicNotificationOperationFactory');
   }
 
   /**
