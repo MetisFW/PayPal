@@ -16,6 +16,9 @@ class PayPalContext extends Object {
   /** @var bool */
   private $gaTrackingEnabled;
 
+  /** @var string */
+  private $experienceProfileId;
+
   /**
    * @param string $clientId
    * @param string $secret
@@ -64,6 +67,20 @@ class PayPalContext extends Object {
    */
   public function isGaTrackingEnabled() {
     return $this->gaTrackingEnabled;
+  }
+
+  /**
+   * @return string
+   */
+  public function getExperienceProfileId() {
+    return $this->experienceProfileId;
+  }
+
+  /**
+   * @param string $experienceProfileId
+   */
+  public function setExperienceProfileId($experienceProfileId) {
+    $this->experienceProfileId = $experienceProfileId;
   }
 
 }

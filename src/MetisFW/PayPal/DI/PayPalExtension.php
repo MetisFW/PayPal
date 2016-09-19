@@ -37,11 +37,15 @@ class PayPalExtension extends CompilerExtension {
     $builder->addDefinition($this->prefix('apiContext'))
       ->setClass('PayPal\Rest\ApiContext', array($this->prefix('@credentials')));
 
-    $builder->addDefinition($this->prefix('PayPal'))
+    $paypal = $builder->addDefinition($this->prefix('PayPal'))
       ->setClass('MetisFW\PayPal\PayPalContext', array($this->prefix('@apiContext')))
       ->addSetup('setConfig', array($config['sdkConfig']))
       ->addSetup('setCurrency', array($config['currency']))
       ->addSetup('setGaTrackingEnabled', array($config['gaTrackingEnabled']));
+
+    if (isset($config['experienceProfileId'])) {
+      $paypal->addSetup('setExperienceProfileId', array($config['experienceProfileId']));
+    }
   }
 
   /**

@@ -15,6 +15,9 @@ payPal:
   clientId: AUqne4ywvozUaSQ1THTZYKFr88bhtA0SS_fXBoJTfeSTIasDBWuXLiLcFlfmSXRfL-kZ3Z5shvNrT6rP
   secret: EDGPDc3a65JBBY7-IKkNak7aGTVTvY-NhJgfhptegSML58fWjfp89U7UKNgGk9UI-UEZ-btfaE2sGST1
   currency: EUR
+  # optional Payment Experience Profile ID
+  # https://developer.paypal.com/docs/api/payment-experience/
+  # experienceProfileId: XP-AAAA-BBBB-CCCC-DDDD
   sdkConfig:
     mode: sandbox
     log.Enabled: true
