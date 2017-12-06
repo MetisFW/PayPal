@@ -3,10 +3,12 @@
 namespace MetisFW\PayPal\Helpers;
 
 use Nette\Http\Url;
-use Nette\Object;
+use Nette\SmartObject;
 use PayPal\Api\Payment;
 
-class GaTracking extends Object {
+class GaTracking {
+
+  use SmartObject;
 
   private function __construct() {
     // nothing

@@ -6,7 +6,7 @@ use MetisFW\PayPal\Helpers\GaTracking;
 use MetisFW\PayPal\PayPalContext;
 use MetisFW\PayPal\PayPalException;
 use Nette\InvalidArgumentException;
-use Nette\Object;
+use Nette\SmartObject;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
 use PayPal\Api\PaymentExecution;
@@ -16,7 +16,9 @@ use PayPal\Exception\PayPalConnectionException;
 use PayPal\Exception\PayPalInvalidCredentialException;
 use PayPal\Exception\PayPalMissingCredentialException;
 
-abstract class BasePaymentOperation extends Object implements PaymentOperation {
+abstract class BasePaymentOperation implements PaymentOperation {
+
+  use SmartObject;
 
   /** @var PayPalContext */
   protected $context;

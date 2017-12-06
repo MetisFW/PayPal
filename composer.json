@@ -20,7 +20,7 @@
     "issues": "https://github.com/MetisFW/PayPal/issues"
   },
   "require": {
-    "php": ">=5.3.0",
+    "php": ">=5.4.0",
     "ext-curl": "*",
     "ext-json": "*",
     "nette/di": "~2.3@dev",
