@@ -44,7 +44,6 @@ class PaymentControl extends Control {
    * @param PaymentOperation $operation
    */
   public function __construct(PaymentOperation $operation) {
-    parent::__construct();
     $this->operation = $operation;
   }
 

@@ -16,6 +16,10 @@ use PayPal\Exception\PayPalConnectionException;
 use PayPal\Exception\PayPalInvalidCredentialException;
 use PayPal\Exception\PayPalMissingCredentialException;
 
+/**
+ * @method void onCancel(self $self)
+ * @method void onReturn(self $self, Payment $payment)
+ */
 abstract class BasePaymentOperation implements PaymentOperation {
 
   use SmartObject;

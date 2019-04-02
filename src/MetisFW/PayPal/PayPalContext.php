@@ -2,12 +2,9 @@
 
 namespace MetisFW\PayPal;
 
-use Nette\SmartObject;
 use PayPal\Rest\ApiContext;
 
 class PayPalContext {
-
-  use SmartObject;
 
   /** @var ApiContext */
   private $apiContext;
