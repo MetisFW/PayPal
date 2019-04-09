@@ -1,61 +1,71 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MetisFW\PayPal\DI;
 
 use Nette\Configurator;
 use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
-use Nette\DI\Config\Helpers;
-use Nette\Utils\Validators;
+use Nette\Schema\Expect;
+use Nette\Schema\Schema;
 
-class PayPalExtension extends CompilerExtension {
+class PayPalExtension extends CompilerExtension
+{
 
-  /**
-   * @var array
-   */
-  public $defaults = array(
-    'currency' => 'CZK',
-    'gaTrackingEnabled' => true
-  );
+	public function loadConfiguration()
+	{
+		$builder = $this->getContainerBuilder();
+		$config = (array) $this->getConfig();
 
-  public function loadConfiguration() {
-    $builder = $this->getContainerBuilder();
-    $config = Helpers::merge($this->getConfig(), $this->defaults);
+		$builder->addFactoryDefinition($this->prefix('simplePaymentOperationFactory'))
+			->setImplement('MetisFW\PayPal\Payment\SimplePaymentOperationFactory');
 
-    Validators::assertField($config, 'clientId');
-    Validators::assertField($config, 'secret');
-    Validators::assertField($config, 'sdkConfig', 'array');
+		$builder->addFactoryDefinition($this->prefix('plainPaymentOperationFactory'))
+			->setImplement('MetisFW\PayPal\Payment\PlainPaymentOperationFactory');
 
-    $builder->addFactoryDefinition($this->prefix('simplePaymentOperationFactory'))
-      ->setImplement('MetisFW\PayPal\Payment\SimplePaymentOperationFactory');
+		$builder->addDefinition($this->prefix('credentials'))
+			->setType('PayPal\Auth\OAuthTokenCredential')
+			->setArguments([$config['clientId'], $config['secret']]);
 
-    $builder->addFactoryDefinition($this->prefix('plainPaymentOperationFactory'))
-      ->setImplement('MetisFW\PayPal\Payment\PlainPaymentOperationFactory');
+		$builder->addDefinition($this->prefix('apiContext'))
+			->setType('PayPal\Rest\ApiContext')
+			->setArguments([$this->prefix('@credentials')]);
 
-    $builder->addDefinition($this->prefix('credentials'))
-      ->setType('PayPal\Auth\OAuthTokenCredential')
-	  ->setArguments(array($config['clientId'], $config['secret']));
+		$paypal = $builder->addDefinition($this->prefix('PayPal'))
+			->setType('MetisFW\PayPal\PayPalContext')
+			->setArguments([$this->prefix('@apiContext')])
+			->addSetup('setConfig', [(array) $config['sdkConfig']])
+			->addSetup('setCurrency', [$config['currency']])
+			->addSetup('setGaTrackingEnabled', [$config['gaTrackingEnabled']]);
 
-    $builder->addDefinition($this->prefix('apiContext'))
-      ->setType('PayPal\Rest\ApiContext')
-	  ->setArguments(array($this->prefix('@credentials')));
+		if ($config['experienceProfileId'] !== null) {
+			$paypal->addSetup('setExperienceProfileId', [$config['experienceProfileId']]);
+		}
+	}
 
-    $paypal = $builder->addDefinition($this->prefix('PayPal'))
-      ->setType('MetisFW\PayPal\PayPalContext')
-	  ->setArguments(array($this->prefix('@apiContext')))
-      ->addSetup('setConfig', array($config['sdkConfig']))
-      ->addSetup('setCurrency', array($config['currency']))
-      ->addSetup('setGaTrackingEnabled', array($config['gaTrackingEnabled']));
+	public static function register(Configurator $configurator)
+	{
+		$configurator->onCompile[] = function ($config, Compiler $compiler) {
+			$compiler->addExtension('payPal', new PayPalExtension());
+		};
+	}
 
-    if (isset($config['experienceProfileId'])) {
-      $paypal->addSetup('setExperienceProfileId', array($config['experienceProfileId']));
-    }
-  }
-
-  public static function register(Configurator $configurator) {
-    $configurator->onCompile[] = function ($config, Compiler $compiler) {
-      $compiler->addExtension('payPal', new PayPalExtension());
-    };
-  }
+	public function getConfigSchema(): Schema
+	{
+		return Expect::structure([
+			'currency' => Expect::string('CZK'),
+			'gaTrackingEnabled' => Expect::bool(true),
+			'experienceProfileId' => Expect::string(),
+			'clientId' => Expect::string()->required(),
+			'secret' => Expect::string()->required(),
+			'sdkConfig' => Expect::structure([
+				'mode' => Expect::anyOf('sandbox', 'live')->required(),
+				'log.LogEnabled' => Expect::bool(),
+				'log.FileName' => Expect::string(),
+				'log.LogLevel' => Expect::anyOf('emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'),
+				'cache.enabled' => Expect::bool(true),
+				'cache.FileName' => Expect::string(),
+			]),
+		]);
+	}
 
 }

@@ -24,18 +24,21 @@
     "ext-curl": "*",
     "ext-json": "*",
     "nette/di": "^3.0",
-    "nette/application": "3.0",
+    "nette/application": "^3.0",
     "paypal/rest-api-sdk-php": "^1.14"
   },
   "require-dev": {
     "nette/bootstrap": "^3.0",
     "tracy/tracy": "^2.6",
     "nette/tester": "^2.2",
-    "mockery/mockery": "^1.2"
+    "mockery/mockery": "^1.2",
+    "phpstan/phpstan": "^0.11",
+    "phpstan/phpstan-nette": "^0.11"
   },
   "autoload": {
-    "psr-0": {
-      "MetisFW\\PayPal\\": "src/"
+    "psr-4": {
+      "MetisFW\\PayPal\\": "src/MetisFW/PayPal",
+      "Tests\\PayPal\\": "tests/PayPal"
     }
   },
   "archive": {
