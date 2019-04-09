@@ -4,10 +4,9 @@ payPal:
   currency: EUR
   sdkConfig:
     mode: sandbox
-    log.Enabled: true
+    log.LogEnabled: true
     log.FileName: './tmp/PayPal.log'
-    log.LogLevel: DEBUG
-    validation.level: log
+    log.LogLevel: debug
     cache.enabled: true
     # 'http.CURLOPT_CONNECTTIMEOUT' => 30
     # 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'/

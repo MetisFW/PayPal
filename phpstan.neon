@@ -1,0 +1,12 @@
+parameters:
+	level: 7
+	paths:
+		- src
+		- tests/PayPal
+	ignoreErrors:
+		- '#Cannot call method getParameter\(\) on Nette\\Application\\UI\\Presenter|null#'
+#		- '#Cannot call method redirectUrl\(\) on Nette\\Application\\UI\\Presenter|null#'
+
+includes:
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan-nette/rules.neon

@@ -1,29 +1,29 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MetisFW\PayPal\Helpers;
 
 use Nette\Http\Url;
-use Nette\SmartObject;
 use PayPal\Api\Payment;
 
-class GaTracking {
+class GaTracking
+{
 
-  use SmartObject;
+	private function __construct()
+	{
+		// nothing
+	}
 
-  private function __construct() {
-    // nothing
-  }
+	public static function addTrackingParameters(Payment $payment): Payment
+	{
+		$redirectUrls = $payment->getRedirectUrls();
 
-  public static function addTrackingParameters(Payment $payment) {
-    $redirectUrls = $payment->getRedirectUrls();
+		$url = new Url($redirectUrls->getReturnUrl());
+		$url->setQueryParameter('utm_nooverride', 1);
 
-    $url = new Url($redirectUrls->getReturnUrl());
-    $url->setQueryParameter('utm_nooverride', 1);
+		$redirectUrls->setReturnUrl($url->getAbsoluteUrl());
+		$payment->setRedirectUrls($redirectUrls);
 
-    $redirectUrls->setReturnUrl($url->getAbsoluteUrl());
-    $payment->setRedirectUrls($redirectUrls);
-
-    return $payment;
-  }
+		return $payment;
+	}
 
 }
