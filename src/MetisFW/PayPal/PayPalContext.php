@@ -1,88 +1,67 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace MetisFW\PayPal;
 
-use Nette\SmartObject;
 use PayPal\Rest\ApiContext;
 
-class PayPalContext {
+class PayPalContext
+{
 
-  use SmartObject;
+	/** @var ApiContext */
+	private $apiContext;
 
-  /** @var ApiContext */
-  private $apiContext;
+	/** @var string */
+	private $currency;
 
-  /** @var string */
-  private $currency;
+	/** @var bool */
+	private $gaTrackingEnabled = false;
 
-  /** @var bool */
-  private $gaTrackingEnabled;
+	/** @var string|null */
+	private $experienceProfileId;
 
-  /** @var string */
-  private $experienceProfileId;
+	public function __construct(ApiContext $apiContext)
+	{
+		$this->apiContext = $apiContext;
+	}
 
-  /**
-   * @param string $clientId
-   * @param string $secret
-   */
-  public function __construct(ApiContext $apiContext) {
-    $this->apiContext = $apiContext;
-  }
+	public function setConfig(array $config): void
+	{
+		$this->apiContext->setConfig($config);
+	}
 
-  /**
-   * @param array $config
-   */
-  public function setConfig(array $config) {
-    $this->apiContext->setConfig($config);
-  }
+	public function setCurrency(string $currency): void
+	{
+		$this->currency = $currency;
+	}
 
-  /**
-   * @param string $currency
-   */
-  public function setCurrency($currency) {
-    $this->currency = $currency;
-  }
+	public function getCurrency(): string
+	{
+		return $this->currency;
+	}
 
-  /**
-   * @return string
-   */
-  public function getCurrency() {
-    return $this->currency;
-  }
+	public function getApiContext(): ApiContext
+	{
+		return $this->apiContext;
+	}
 
-  /**
-   * @return ApiContext
-   */
-  public function getApiContext() {
-    return $this->apiContext;
-  }
+	public function setGaTrackingEnabled(bool $value): void
+	{
+		$this->gaTrackingEnabled = $value;
+	}
 
-  /**
-   * @param bool $value
-   */
-  public function setGaTrackingEnabled($value) {
-    $this->gaTrackingEnabled = $value;
-  }
+	public function isGaTrackingEnabled(): bool
+	{
+		return $this->gaTrackingEnabled;
+	}
 
-  /**
-   * @return bool
-   */
-  public function isGaTrackingEnabled() {
-    return $this->gaTrackingEnabled;
-  }
+	public function getExperienceProfileId(): ?string
+	{
+		return $this->experienceProfileId;
+	}
 
-  /**
-   * @return string
-   */
-  public function getExperienceProfileId() {
-    return $this->experienceProfileId;
-  }
-
-  /**
-   * @param string $experienceProfileId
-   */
-  public function setExperienceProfileId($experienceProfileId) {
-    $this->experienceProfileId = $experienceProfileId;
-  }
+	public function setExperienceProfileId(string $experienceProfileId): void
+	{
+		$this->experienceProfileId = $experienceProfileId;
+	}
 
 }
