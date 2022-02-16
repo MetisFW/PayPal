@@ -1,6 +1,8 @@
 <?php
 
-namespace PayPal\Payment;
+declare(strict_types=1);
+
+namespace Tests\PayPal\Payment;
 
 use MetisFW\PayPal\PayPalContext;
 use PayPal\Api\Payment;
@@ -11,7 +13,7 @@ use Tester\Assert;
 use Tester\TestCase;
 
 require_once __DIR__ . '/../../bootstrap.php';
-require_once 'DummyPaymentOperation.php';
+require_once __DIR__ . '/DummyPaymentOperation.php';
 
 class PaymentOperationHandleReturnTest extends TestCase
 {
@@ -27,16 +29,16 @@ class PaymentOperationHandleReturnTest extends TestCase
   protected function setUp()
   {
     parent::setUp();
-    $this->config = array(
+    $this->config = [
       'clientId' => 'AUqne4ywvozUaSQ1THTZYKFr88bhtA0SS_fXBoJTfeSTIasDBWuXLiLcFlfmSXRfL-kZ3Z5shvNrT6rP',
       'secretId' => 'EDGPDc3a65JBBY7-IKkNak7aGTVTvY-NhJgfhptegSML58fWjfp89U7UKNgGk9UI-UEZ-btfaE2sGST1'
-    );
+    ];
   }
 
   public function testHandleReturn()
   {
     $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
-    $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
+    $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', [$credentials])->makePartial();
 
     $context = new PayPalContext($apiContext);
     $operation = new DummyPaymentOperation(
@@ -76,5 +78,3 @@ class PaymentOperationHandleReturnTest extends TestCase
     \Mockery::close();
   }
 }
-
-\run(new PaymentOperationHandleReturnTest());

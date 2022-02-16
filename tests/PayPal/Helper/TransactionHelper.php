@@ -1,6 +1,8 @@
 <?php
 
-namespace MetisFW\PayPal\Helper;
+declare(strict_types=1);
+
+namespace Tests\PayPal\Helper;
 
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
@@ -11,15 +13,7 @@ use PayPal\Api\Transaction;
 class TransactionHelper
 {
 
-  /**
-   * @param Amount $amount
-   * @param ItemList $itemLists
-   * @param string $invoiceNumber
-   * @param string $description
-   *
-   * @return Transaction
-   */
-  static public function createTransaction(Amount $amount, ItemList $itemLists, $invoiceNumber, $description)
+  static public function createTransaction(Amount $amount, ItemList $itemLists, string $invoiceNumber, string $description): Transaction
   {
     $transaction = new Transaction();
     $transaction->setAmount($amount);
@@ -29,14 +23,7 @@ class TransactionHelper
     return $transaction;
   }
 
-  /**
-   * @param string $currency
-   * @param int $total
-   * @param Details $details
-   *
-   * @return Amount
-   */
-  static public function createAmount(Details $details, $total, $currency)
+  static public function createAmount(Details $details, int $total, string $currency): Amount
   {
     $amount = new Amount();
     $amount->setCurrency($currency);
@@ -45,14 +32,7 @@ class TransactionHelper
     return $amount;
   }
 
-  /**
-   * @param float $shippingPrice
-   * @param float $taxPrice
-   * @param float $subtotal
-   *
-   * @return Details
-   */
-  static public function createDetails($shippingPrice, $taxPrice, $subtotal)
+  static public function createDetails(float $shippingPrice, float $taxPrice, float $subtotal): Details
   {
     $details = new Details();
     $details->setShipping($shippingPrice);
@@ -62,32 +42,19 @@ class TransactionHelper
     return $details;
   }
 
-  /**
-   * @param array $items
-   *
-   * @return ItemList
-   */
-  static public function createItemList(array $items)
+  static public function createItemList(array $items): ItemList
   {
     $itemList = new ItemList();
     $itemList->setItems($items);
     return $itemList;
   }
 
-  /**
-   * @param string $name
-   * @param int $currency
-   * @param int $quantity
-   * @param string $sku
-   * @param int $price
-   * @return Item
-   */
-  static public function createItem($name, $currency, $quantity, $sku, $price)
+  static public function createItem(string $name, string $currency, int $quantity, string $sku, int $price): Item
   {
     $item = new Item();
     $item->setName($name);
     $item->setCurrency($currency);
-    $item->setQuantity($quantity);
+    $item->setQuantity((string) $quantity);
     $item->setSku($sku);
     $item->setPrice($price);
     return $item;

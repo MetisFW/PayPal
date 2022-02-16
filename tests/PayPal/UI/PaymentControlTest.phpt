@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PayPal\UI\Payment;
 
 use MetisFW\PayPal\UI\PaymentControl;
@@ -28,10 +30,7 @@ class PaymentControlTest extends TestCase
     parent::setUp();
 
     $this->operationMock = \Mockery::mock('\MetisFW\PayPal\Payment\PaymentOperation');
-    $this->control = \Mockery::mock(
-      '\MetisFW\PayPal\UI\PaymentControl',
-      array($this->operationMock)
-    )
+    $this->control = \Mockery::mock('\MetisFW\PayPal\UI\PaymentControl', [$this->operationMock])
       ->makePartial()
       ->shouldAllowMockingProtectedMethods();
   }
@@ -92,5 +91,3 @@ class PaymentControlTest extends TestCase
     \Mockery::close();
   }
 }
-
-run(new PaymentControlTest());
