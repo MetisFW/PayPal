@@ -60,10 +60,6 @@ abstract class BasePaymentOperation implements PaymentOperation
   public function getPayment(): Payment
   {
     $payer = $this->getPayer();
-    if (!$payer || !($payer instanceof Payer)) {
-      throw new InvalidArgumentException("Method getPayer has to return instance of Payer. Instead " .
-        gettype($payer) . " given.");
-    }
 
     if (!$payer->getPaymentMethod()) {
       $payer->setPaymentMethod('paypal');
@@ -131,8 +127,14 @@ abstract class BasePaymentOperation implements PaymentOperation
       $exception instanceof PayPalMissingCredentialException ||
       $exception instanceof PayPalConnectionException
     ) {
+
+      $message = $exception->getMessage();
+
+      if ($exception instanceof PayPalConnectionException) {
+        $message .= ' Data: ' . $exception->getData();
+      }
       return new PayPalException(
-        $exception->getMessage() . 'Data: ' . $exception->getData(),
+        $message,
         $exception->getCode(),
         $exception
       );
