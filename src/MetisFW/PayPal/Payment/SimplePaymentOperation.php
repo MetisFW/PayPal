@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetisFW\PayPal\Payment;
 
 use MetisFW\PayPal\PayPalContext;
@@ -24,13 +26,9 @@ class SimplePaymentOperation extends BasePaymentOperation
   private $currency;
 
   /**
-   * @param PayPalContext $context
-   * @param string $name
    * @param int|float|string $price
-   * @param int $quantity
-   * @param string|null $currency
    */
-  public function __construct(PayPalContext $context, $name, $price, $quantity = 1, $currency = null)
+  public function __construct(PayPalContext $context, string $name, $price, int $quantity = 1, ?string $currency = null)
   {
     parent::__construct($context);
     $this->name = $name;
@@ -40,9 +38,9 @@ class SimplePaymentOperation extends BasePaymentOperation
   }
 
   /**
-   * @return array array of PayPal\Api\Transaction
+   * @return Transaction[]
    */
-  protected function getTransactions()
+  protected function getTransactions(): array
   {
     $payPalItems = array();
     $currency = $this->currency ? $this->currency : $this->context->getCurrency();
@@ -50,11 +48,11 @@ class SimplePaymentOperation extends BasePaymentOperation
     $payPalItem = new Item();
     $payPalItem->setName($this->name);
     $payPalItem->setCurrency($currency);
-    $payPalItem->setQuantity($this->quantity);
-    $payPalItem->setPrice($this->price);
+    $payPalItem->setQuantity((string) $this->quantity);
+    $payPalItem->setPrice((float) $this->price);
 
     $payPalItems[] = $payPalItem;
-    $totalPrice = $this->quantity * $this->price;
+    $totalPrice = $this->quantity * (float) $this->price;
 
     $itemLists = new ItemList();
     $itemLists->setItems($payPalItems);
@@ -67,6 +65,6 @@ class SimplePaymentOperation extends BasePaymentOperation
     $transaction->setAmount($amount);
     $transaction->setItemList($itemLists);
 
-    return array($transaction);
+    return [$transaction];
   }
 }

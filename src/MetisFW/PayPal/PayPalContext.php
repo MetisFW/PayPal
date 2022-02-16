@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetisFW\PayPal;
 
 use Nette\SmartObject;
@@ -17,80 +19,52 @@ class PayPalContext
   private $currency;
 
   /** @var bool */
-  private $gaTrackingEnabled;
+  private $gaTrackingEnabled = false;
 
-  /** @var string */
+  /** @var string|null */
   private $experienceProfileId;
 
-  /**
-   * @param string $clientId
-   * @param string $secret
-   */
   public function __construct(ApiContext $apiContext)
   {
     $this->apiContext = $apiContext;
   }
 
-  /**
-   * @param array $config
-   */
-  public function setConfig(array $config)
+  public function setConfig(array $config): void
   {
     $this->apiContext->setConfig($config);
   }
 
-  /**
-   * @param string $currency
-   */
-  public function setCurrency($currency)
+  public function setCurrency(string $currency): void
   {
     $this->currency = $currency;
   }
 
-  /**
-   * @return string
-   */
-  public function getCurrency()
+  public function getCurrency(): string
   {
     return $this->currency;
   }
 
-  /**
-   * @return ApiContext
-   */
-  public function getApiContext()
+  public function getApiContext(): ApiContext
   {
     return $this->apiContext;
   }
 
-  /**
-   * @param bool $value
-   */
-  public function setGaTrackingEnabled($value)
+  public function setGaTrackingEnabled(bool $value): void
   {
     $this->gaTrackingEnabled = $value;
   }
 
-  /**
-   * @return bool
-   */
-  public function isGaTrackingEnabled()
+  public function isGaTrackingEnabled(): bool
   {
     return $this->gaTrackingEnabled;
   }
 
-  /**
-   * @return string
-   */
-  public function getExperienceProfileId()
+  public function getExperienceProfileId(): ?string
   {
     return $this->experienceProfileId;
   }
 
-  /**
-   * @param string $experienceProfileId
-   */
-  public function setExperienceProfileId($experienceProfileId)
+  public function setExperienceProfileId(string $experienceProfileId): void
   {
     $this->experienceProfileId = $experienceProfileId;
   }

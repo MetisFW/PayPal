@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetisFW\PayPal\Payment;
 
 use MetisFW\PayPal\Helpers\GaTracking;
 use MetisFW\PayPal\PayPalContext;
 use MetisFW\PayPal\PayPalException;
-use Nette\InvalidArgumentException;
 use Nette\SmartObject;
 use PayPal\Api\Payer;
 use PayPal\Api\Payment;
@@ -16,6 +17,10 @@ use PayPal\Exception\PayPalConnectionException;
 use PayPal\Exception\PayPalInvalidCredentialException;
 use PayPal\Exception\PayPalMissingCredentialException;
 
+/**
+ * @method void onCancel(self $paymentOperation)
+ * @method void onReturn(self $paymentOperation, Payment $payment)
+ */
 abstract class BasePaymentOperation implements PaymentOperation
 {
 
@@ -34,34 +39,25 @@ abstract class BasePaymentOperation implements PaymentOperation
    */
   public $onReturn;
 
-  /**
-   * @param PayPalContext $context
-   */
   public function __construct(PayPalContext $context)
   {
     $this->context = $context;
   }
 
   /**
-   * @return array array of PayPal\Api\Transaction
+   * @return Transaction[]
    */
-  abstract protected function getTransactions();
+  abstract protected function getTransactions(): array;
 
-  /**
-   * @return Payer
-   */
-  protected function getPayer()
+  protected function getPayer(): Payer
   {
-    $payer = new Payer();
-    return $payer;
+    return new Payer();
   }
 
   /**
    * @see http://paypal.github.io/PayPal-PHP-SDK/sample/doc/payments/CreatePaymentUsingPayPal.html
-   *
-   * @return Payment
    */
-  public function getPayment()
+  public function getPayment(): Payment
   {
     $payer = $this->getPayer();
     if (!$payer || !($payer instanceof Payer)) {
@@ -90,10 +86,8 @@ abstract class BasePaymentOperation implements PaymentOperation
 
   /**
    * Execute payment api call
-   *
-   * @return Payment
    */
-  public function createPayment(Payment $payment)
+  public function createPayment(Payment $payment): Payment
   {
     if ($this->context->isGaTrackingEnabled()) {
       $payment = GaTracking::addTrackingParameters($payment);
@@ -106,13 +100,7 @@ abstract class BasePaymentOperation implements PaymentOperation
     }
   }
 
-  /**
-   * @param string $paymentId
-   * @param string $payerId
-   *
-   * @return void
-   */
-  public function handleReturn($paymentId, $payerId)
+  public function handleReturn(string $paymentId, string $payerId): Payment
   {
     try {
       $payment = Payment::get($paymentId, $this->context->getApiContext());
@@ -126,22 +114,16 @@ abstract class BasePaymentOperation implements PaymentOperation
     }
 
     $this->onReturn($this, $paidPayment);
+
     return $paidPayment;
   }
 
-  /**
-   * @return void
-   */
-  public function handleCancel()
+  public function handleCancel(): void
   {
     $this->onCancel($this);
   }
 
-  /**
-   * @param \Exception $exception
-   * @return \Exception
-   */
-  protected function translateException(\Exception $exception)
+  protected function translateException(\Exception $exception): \Exception
   {
     if (
       $exception instanceof PayPalConfigurationException ||
@@ -160,11 +142,9 @@ abstract class BasePaymentOperation implements PaymentOperation
   }
 
   /**
-   * @param array $transactions
-   *
    * @throws \LogicException throws when some item from array is not instance of \PayPal\Api\Transaction
    */
-  protected function checkTransactions(array $transactions)
+  protected function checkTransactions(array $transactions): void
   {
     foreach ($transactions as $transaction) {
       if (!$transaction instanceof Transaction) {

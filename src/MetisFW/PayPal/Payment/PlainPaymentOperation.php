@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetisFW\PayPal\Payment;
 
 use MetisFW\PayPal\PayPalContext;
+use PayPal\Api\Transaction;
 
 class PlainPaymentOperation extends BasePaymentOperation
 {
@@ -10,10 +13,6 @@ class PlainPaymentOperation extends BasePaymentOperation
   /** @var array */
   private $transactions;
 
-  /**
-   * @param PayPalContext $context
-   * @param array $transactions
-   */
   public function __construct(PayPalContext $context, array $transactions)
   {
     parent::__construct($context);
@@ -22,9 +21,9 @@ class PlainPaymentOperation extends BasePaymentOperation
   }
 
   /**
-   * @return array array of PayPal\Api\Transaction
+   * @return Transaction[]
    */
-  protected function getTransactions()
+  protected function getTransactions(): array
   {
     return $this->transactions;
   }

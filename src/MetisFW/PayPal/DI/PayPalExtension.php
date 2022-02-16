@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetisFW\PayPal\DI;
 
 use Nette\Configurator;
@@ -50,9 +52,6 @@ class PayPalExtension extends CompilerExtension
     }
   }
 
-  /**
-   * @param Configurator $configurator
-   */
   public static function register(Configurator $configurator)
   {
     $configurator->onCompile[] = function ($config, Compiler $compiler) {

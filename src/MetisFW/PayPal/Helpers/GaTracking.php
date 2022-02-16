@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetisFW\PayPal\Helpers;
 
 use Nette\Http\Url;
@@ -16,7 +18,7 @@ class GaTracking
     // nothing
   }
 
-  public static function addTrackingParameters(Payment $payment)
+  public static function addTrackingParameters(Payment $payment): Payment
   {
     $redirectUrls = $payment->getRedirectUrls();
 
