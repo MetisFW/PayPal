@@ -6,15 +6,18 @@ use Nette\Http\Url;
 use Nette\SmartObject;
 use PayPal\Api\Payment;
 
-class GaTracking {
+class GaTracking
+{
 
   use SmartObject;
 
-  private function __construct() {
+  private function __construct()
+  {
     // nothing
   }
 
-  public static function addTrackingParameters(Payment $payment) {
+  public static function addTrackingParameters(Payment $payment)
+  {
     $redirectUrls = $payment->getRedirectUrls();
 
     $url = new Url($redirectUrls->getReturnUrl());
@@ -25,5 +28,4 @@ class GaTracking {
 
     return $payment;
   }
-
 }

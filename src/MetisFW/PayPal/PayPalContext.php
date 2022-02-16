@@ -5,7 +5,8 @@ namespace MetisFW\PayPal;
 use Nette\SmartObject;
 use PayPal\Rest\ApiContext;
 
-class PayPalContext {
+class PayPalContext
+{
 
   use SmartObject;
 
@@ -25,64 +26,72 @@ class PayPalContext {
    * @param string $clientId
    * @param string $secret
    */
-  public function __construct(ApiContext $apiContext) {
+  public function __construct(ApiContext $apiContext)
+  {
     $this->apiContext = $apiContext;
   }
 
   /**
    * @param array $config
    */
-  public function setConfig(array $config) {
+  public function setConfig(array $config)
+  {
     $this->apiContext->setConfig($config);
   }
 
   /**
    * @param string $currency
    */
-  public function setCurrency($currency) {
+  public function setCurrency($currency)
+  {
     $this->currency = $currency;
   }
 
   /**
    * @return string
    */
-  public function getCurrency() {
+  public function getCurrency()
+  {
     return $this->currency;
   }
 
   /**
    * @return ApiContext
    */
-  public function getApiContext() {
+  public function getApiContext()
+  {
     return $this->apiContext;
   }
 
   /**
    * @param bool $value
    */
-  public function setGaTrackingEnabled($value) {
+  public function setGaTrackingEnabled($value)
+  {
     $this->gaTrackingEnabled = $value;
   }
 
   /**
    * @return bool
    */
-  public function isGaTrackingEnabled() {
+  public function isGaTrackingEnabled()
+  {
     return $this->gaTrackingEnabled;
   }
 
   /**
    * @return string
    */
-  public function getExperienceProfileId() {
+  public function getExperienceProfileId()
+  {
     return $this->experienceProfileId;
   }
 
   /**
    * @param string $experienceProfileId
    */
-  public function setExperienceProfileId($experienceProfileId) {
+  public function setExperienceProfileId($experienceProfileId)
+  {
     $this->experienceProfileId = $experienceProfileId;
   }
-
 }

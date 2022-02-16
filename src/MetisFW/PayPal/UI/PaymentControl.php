@@ -8,7 +8,8 @@ use Nette\Application\UI\Control;
 use PayPal\Api\Payment;
 use PayPal\Api\RedirectUrls;
 
-class PaymentControl extends Control {
+class PaymentControl extends Control
+{
 
   /**
    * @var PaymentOperation
@@ -43,12 +44,14 @@ class PaymentControl extends Control {
   /**
    * @param PaymentOperation $operation
    */
-  public function __construct(PaymentOperation $operation) {
+  public function __construct(PaymentOperation $operation)
+  {
     parent::__construct();
     $this->operation = $operation;
   }
 
-  public function handleCheckout() {
+  public function handleCheckout()
+  {
     try {
       $payment = $this->operation->getPayment();
       $this->setPaymentParameters($payment);
@@ -58,20 +61,19 @@ class PaymentControl extends Control {
 
       $approvalUrl = $createdPayment->getApprovalLink();
       $this->getPresenter()->redirectUrl($approvalUrl);
-    }
-    catch(PayPalException $exception) {
+    } catch (PayPalException $exception) {
       $this->errorHandler($exception);
     }
   }
 
-  public function handleReturn() {
+  public function handleReturn()
+  {
     $paymentId = $this->getPresenter()->getParameter('paymentId');
     $payerId = $this->getPresenter()->getParameter('PayerID');
 
     try {
       $paidPayment = $this->operation->handleReturn($paymentId, $payerId);
-    }
-    catch(PayPalException $exception) {
+    } catch (PayPalException $exception) {
       $this->errorHandler($exception);
       return;
     }
@@ -79,15 +81,18 @@ class PaymentControl extends Control {
     $this->onSuccess($this, $paidPayment);
   }
 
-  public function handleCancel() {
+  public function handleCancel()
+  {
     $this->operation->handleCancel();
     $this->onCancel($this);
   }
 
-  public function setTemplateFilePath($templateFilePath) {
+  public function setTemplateFilePath($templateFilePath)
+  {
     $this->templateFilePath = $templateFilePath;
   }
-  public function getTemplateFilePath() {
+  public function getTemplateFilePath()
+  {
     return $this->templateFilePath ? $this->templateFilePath : $this->getDefaultTemplateFilePath();
   }
 
@@ -95,7 +100,8 @@ class PaymentControl extends Control {
    * @param array $attrs
    * @param string $text
    */
-  public function render($attrs = array(), $text = "Pay") {
+  public function render($attrs = array(), $text = "Pay")
+  {
     $template = $this->template;
     $templateFilePath = $this->getTemplateFilePath();
     $template->setFile($templateFilePath);
@@ -112,8 +118,9 @@ class PaymentControl extends Control {
    *
    * @return void
    */
-  protected function errorHandler(\Exception $exception) {
-    if(!$this->onError) {
+  protected function errorHandler(\Exception $exception)
+  {
+    if (!$this->onError) {
       throw $exception;
     }
 
@@ -123,14 +130,15 @@ class PaymentControl extends Control {
   /**
    * @param Payment $payment
    */
-  protected function setPaymentParameters(Payment $payment) {
+  protected function setPaymentParameters(Payment $payment)
+  {
     $redirectUrls = new RedirectUrls();
     $redirectUrls->setReturnUrl($this->link('//return!'))->setCancelUrl($this->link('//cancel!'));
     $payment->setRedirectUrls($redirectUrls);
   }
 
-  protected function getDefaultTemplateFilePath() {
-    return __DIR__.'/templates/PaymentControl.latte';
+  protected function getDefaultTemplateFilePath()
+  {
+    return __DIR__ . '/templates/PaymentControl.latte';
   }
-
 }

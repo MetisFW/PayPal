@@ -2,7 +2,8 @@
 
 namespace MetisFW\PayPal\Payment;
 
-interface SimplePaymentOperationFactory {
+interface SimplePaymentOperationFactory
+{
 
   /**
    * @param string $name
@@ -13,5 +14,4 @@ interface SimplePaymentOperationFactory {
    * @return SimplePaymentOperation
    */
   public function create($name, $price, $quantity = 1, $currency = null);
-
 }

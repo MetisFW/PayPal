@@ -16,7 +16,8 @@ use PayPal\Exception\PayPalConnectionException;
 use PayPal\Exception\PayPalInvalidCredentialException;
 use PayPal\Exception\PayPalMissingCredentialException;
 
-abstract class BasePaymentOperation implements PaymentOperation {
+abstract class BasePaymentOperation implements PaymentOperation
+{
 
   use SmartObject;
 
@@ -36,7 +37,8 @@ abstract class BasePaymentOperation implements PaymentOperation {
   /**
    * @param PayPalContext $context
    */
-  public function __construct(PayPalContext $context) {
+  public function __construct(PayPalContext $context)
+  {
     $this->context = $context;
   }
 
@@ -48,7 +50,8 @@ abstract class BasePaymentOperation implements PaymentOperation {
   /**
    * @return Payer
    */
-  protected function getPayer() {
+  protected function getPayer()
+  {
     $payer = new Payer();
     return $payer;
   }
@@ -58,14 +61,15 @@ abstract class BasePaymentOperation implements PaymentOperation {
    *
    * @return Payment
    */
-  public function getPayment() {
+  public function getPayment()
+  {
     $payer = $this->getPayer();
-    if(!$payer || !($payer instanceof Payer)) {
-      throw new InvalidArgumentException("Method getPayer has to return instance of Payer. Instead ".
-        gettype($payer)." given.");
+    if (!$payer || !($payer instanceof Payer)) {
+      throw new InvalidArgumentException("Method getPayer has to return instance of Payer. Instead " .
+        gettype($payer) . " given.");
     }
 
-    if(!$payer->getPaymentMethod()) {
+    if (!$payer->getPaymentMethod()) {
       $payer->setPaymentMethod('paypal');
     }
 
@@ -89,15 +93,15 @@ abstract class BasePaymentOperation implements PaymentOperation {
    *
    * @return Payment
    */
-  public function createPayment(Payment $payment) {
-    if($this->context->isGaTrackingEnabled()) {
+  public function createPayment(Payment $payment)
+  {
+    if ($this->context->isGaTrackingEnabled()) {
       $payment = GaTracking::addTrackingParameters($payment);
     }
 
     try {
       return $payment->create($this->context->getApiContext());
-    }
-    catch(\Exception $exception) {
+    } catch (\Exception $exception) {
       throw $this->translateException($exception);
     }
   }
@@ -108,7 +112,8 @@ abstract class BasePaymentOperation implements PaymentOperation {
    *
    * @return void
    */
-  public function handleReturn($paymentId, $payerId) {
+  public function handleReturn($paymentId, $payerId)
+  {
     try {
       $payment = Payment::get($paymentId, $this->context->getApiContext());
       $execution = new PaymentExecution();
@@ -116,8 +121,7 @@ abstract class BasePaymentOperation implements PaymentOperation {
 
       $payment->execute($execution, $this->context->getApiContext());
       $paidPayment = Payment::get($paymentId, $this->context->getApiContext());
-    }
-    catch(\Exception $exception) {
+    } catch (\Exception $exception) {
       throw $this->translateException($exception);
     }
 
@@ -128,7 +132,8 @@ abstract class BasePaymentOperation implements PaymentOperation {
   /**
    * @return void
    */
-  public function handleCancel() {
+  public function handleCancel()
+  {
     $this->onCancel($this);
   }
 
@@ -136,16 +141,19 @@ abstract class BasePaymentOperation implements PaymentOperation {
    * @param \Exception $exception
    * @return \Exception
    */
-  protected function translateException(\Exception $exception) {
-    if($exception instanceof PayPalConfigurationException ||
+  protected function translateException(\Exception $exception)
+  {
+    if (
+      $exception instanceof PayPalConfigurationException ||
       $exception instanceof PayPalInvalidCredentialException ||
       $exception instanceof PayPalMissingCredentialException ||
       $exception instanceof PayPalConnectionException
     ) {
       return new PayPalException(
-        $exception->getMessage().'Data: '.$exception->getData(),
+        $exception->getMessage() . 'Data: ' . $exception->getData(),
         $exception->getCode(),
-        $exception);
+        $exception
+      );
     }
 
     return $exception;
@@ -156,13 +164,13 @@ abstract class BasePaymentOperation implements PaymentOperation {
    *
    * @throws \LogicException throws when some item from array is not instance of \PayPal\Api\Transaction
    */
-  protected function checkTransactions(array $transactions) {
-    foreach($transactions as $transaction) {
-      if(!$transaction instanceof Transaction) {
-        throw new \LogicException('Expect array of \PayPal\Api\Transaction instances but instance of '.
-          gettype($transaction).' given');
+  protected function checkTransactions(array $transactions)
+  {
+    foreach ($transactions as $transaction) {
+      if (!$transaction instanceof Transaction) {
+        throw new \LogicException('Expect array of \PayPal\Api\Transaction instances but instance of ' .
+          gettype($transaction) . ' given');
       }
     }
   }
-
 }

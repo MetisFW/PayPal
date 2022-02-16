@@ -4,7 +4,8 @@ namespace MetisFW\PayPal\Payment;
 
 use PayPal\Api\Payment;
 
-interface PaymentOperation {
+interface PaymentOperation
+{
 
   /**
    * Create paypal payment
@@ -34,5 +35,4 @@ interface PaymentOperation {
    * @return void
    */
   public function handleCancel();
-
 }

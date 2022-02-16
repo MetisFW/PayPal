@@ -2,6 +2,6 @@
 
 namespace MetisFW\PayPal;
 
-class PayPalException extends \RuntimeException {
-
+class PayPalException extends \RuntimeException
+{
 }

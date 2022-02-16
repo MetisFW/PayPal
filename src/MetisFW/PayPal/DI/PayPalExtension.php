@@ -7,7 +7,8 @@ use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
 use Nette\Utils\Validators;
 
-class PayPalExtension extends CompilerExtension {
+class PayPalExtension extends CompilerExtension
+{
 
   /**
    * @var array
@@ -17,7 +18,8 @@ class PayPalExtension extends CompilerExtension {
     'gaTrackingEnabled' => true
   );
 
-  public function loadConfiguration() {
+  public function loadConfiguration()
+  {
     $builder = $this->getContainerBuilder();
     $config = $this->getConfig($this->defaults);
 
@@ -51,10 +53,10 @@ class PayPalExtension extends CompilerExtension {
   /**
    * @param Configurator $configurator
    */
-  public static function register(Configurator $configurator) {
+  public static function register(Configurator $configurator)
+  {
     $configurator->onCompile[] = function ($config, Compiler $compiler) {
       $compiler->addExtension('payPal', new PayPalExtension());
     };
   }
-
 }

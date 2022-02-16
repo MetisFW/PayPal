@@ -8,7 +8,8 @@ use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\Transaction;
 
-class SimplePaymentOperation extends BasePaymentOperation {
+class SimplePaymentOperation extends BasePaymentOperation
+{
 
   /** @var string */
   private $name;
@@ -29,7 +30,8 @@ class SimplePaymentOperation extends BasePaymentOperation {
    * @param int $quantity
    * @param string|null $currency
    */
-  public function __construct(PayPalContext $context, $name, $price, $quantity = 1, $currency = null) {
+  public function __construct(PayPalContext $context, $name, $price, $quantity = 1, $currency = null)
+  {
     parent::__construct($context);
     $this->name = $name;
     $this->quantity = $quantity;
@@ -40,7 +42,8 @@ class SimplePaymentOperation extends BasePaymentOperation {
   /**
    * @return array array of PayPal\Api\Transaction
    */
-  protected function getTransactions() {
+  protected function getTransactions()
+  {
     $payPalItems = array();
     $currency = $this->currency ? $this->currency : $this->context->getCurrency();
 
@@ -66,5 +69,4 @@ class SimplePaymentOperation extends BasePaymentOperation {
 
     return array($transaction);
   }
-
 }
