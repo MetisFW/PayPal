@@ -1,14 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetisFW\PayPal\UI;
 
 use MetisFW\PayPal\Payment\PaymentOperation;
+use MetisFW\PayPal\PayPalContext;
 use MetisFW\PayPal\PayPalException;
 use Nette\Application\UI\Control;
+use Nette\Bridges\ApplicationLatte\Template;
 use PayPal\Api\Payment;
 use PayPal\Api\RedirectUrls;
 
-class PaymentControl extends Control {
+/**
+ * @method void onCancel(PaymentControl $control)
+ * @method void onError(PaymentControl $control, \Exception $exception)
+ * @method void onCheckout(PaymentControl $control, PayPalContext $context)
+ * @method void onSuccess(PaymentControl $control, array $response)
+ * @property-read Template $template
+ */
+class PaymentControl extends Control
+{
 
   /**
    * @var PaymentOperation
@@ -21,34 +33,32 @@ class PaymentControl extends Control {
   private $templateFilePath;
 
   /**
-   * @var array of callbacks, signature: function(AccountBasedPayPalControl $control, PayPalContext $context)
+   * @var array of callbacks, signature: function(PaymentControl $control, PayPalContext $context)
    */
-  public $onCheckout = array();
+  public $onCheckout = [];
 
   /**
-   * @var array of callbacks, signature: function(AccountBasedPayPalControl $control, array $response)
+   * @var array of callbacks, signature: function(PaymentControl $control, array $response)
    */
-  public $onSuccess = array();
+  public $onSuccess = [];
 
   /**
-   * @var array of callbacks, signature: function(AccountBasedPayPalControl $control)
+   * @var array of callbacks, signature: function(PaymentControl $control)
    */
-  public $onCancel = array();
+  public $onCancel = [];
 
   /**
-   * @var array of callbacks, signature: function(AccountBasedPayPalControl $control, \Exception $exception)
+   * @var array of callbacks, signature: function(PaymentControl $control, \Exception $exception)
    */
-  public $onError = array();
+  public $onError = [];
 
-  /**
-   * @param PaymentOperation $operation
-   */
-  public function __construct(PaymentOperation $operation) {
-    parent::__construct();
+  public function __construct(PaymentOperation $operation)
+  {
     $this->operation = $operation;
   }
 
-  public function handleCheckout() {
+  public function handleCheckout(): void
+  {
     try {
       $payment = $this->operation->getPayment();
       $this->setPaymentParameters($payment);
@@ -58,20 +68,19 @@ class PaymentControl extends Control {
 
       $approvalUrl = $createdPayment->getApprovalLink();
       $this->getPresenter()->redirectUrl($approvalUrl);
-    }
-    catch(PayPalException $exception) {
+    } catch (PayPalException $exception) {
       $this->errorHandler($exception);
     }
   }
 
-  public function handleReturn() {
-    $paymentId = $this->getPresenter()->getParameter('paymentId');
-    $payerId = $this->getPresenter()->getParameter('PayerID');
+  public function handleReturn(?string $paymentId, ?string $payerId): void
+  {
+    $paymentId = $paymentId ?: $this->getPresenter()->getParameter('paymentId');
+    $payerId = $payerId ?: $this->getPresenter()->getParameter('PayerID');
 
     try {
       $paidPayment = $this->operation->handleReturn($paymentId, $payerId);
-    }
-    catch(PayPalException $exception) {
+    } catch (PayPalException $exception) {
       $this->errorHandler($exception);
       return;
     }
@@ -79,23 +88,24 @@ class PaymentControl extends Control {
     $this->onSuccess($this, $paidPayment);
   }
 
-  public function handleCancel() {
+  public function handleCancel(): void
+  {
     $this->operation->handleCancel();
     $this->onCancel($this);
   }
 
-  public function setTemplateFilePath($templateFilePath) {
+  public function setTemplateFilePath(string $templateFilePath): void
+  {
     $this->templateFilePath = $templateFilePath;
   }
-  public function getTemplateFilePath() {
+
+  public function getTemplateFilePath(): string
+  {
     return $this->templateFilePath ? $this->templateFilePath : $this->getDefaultTemplateFilePath();
   }
 
-  /**
-   * @param array $attrs
-   * @param string $text
-   */
-  public function render($attrs = array(), $text = "Pay") {
+  public function render(array $attrs = [], string $text = "Pay"): void
+  {
     $template = $this->template;
     $templateFilePath = $this->getTemplateFilePath();
     $template->setFile($templateFilePath);
@@ -106,31 +116,26 @@ class PaymentControl extends Control {
   }
 
   /**
-   * @param \Exception $exception
-   *
    * @throws PayPalException
-   *
-   * @return void
    */
-  protected function errorHandler(\Exception $exception) {
-    if(!$this->onError) {
+  protected function errorHandler(\Exception $exception): void
+  {
+    if (!$this->onError) {
       throw $exception;
     }
 
     $this->onError($this, $exception);
   }
 
-  /**
-   * @param Payment $payment
-   */
-  protected function setPaymentParameters(Payment $payment) {
+  protected function setPaymentParameters(Payment $payment): void
+  {
     $redirectUrls = new RedirectUrls();
     $redirectUrls->setReturnUrl($this->link('//return!'))->setCancelUrl($this->link('//cancel!'));
     $payment->setRedirectUrls($redirectUrls);
   }
 
-  protected function getDefaultTemplateFilePath() {
-    return __DIR__.'/templates/PaymentControl.latte';
+  protected function getDefaultTemplateFilePath(): string
+  {
+    return __DIR__ . '/templates/PaymentControl.latte';
   }
-
 }

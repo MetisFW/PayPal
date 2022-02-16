@@ -1,14 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MetisFW\PayPal\Payment;
 
-interface PlainPaymentOperationFactory {
+interface PlainPaymentOperationFactory
+{
 
-  /**
-   * @param array $transactions
-   *
-   * @return PlainPaymentOperation
-   */
-  public function create(array $transactions);
-
+  public function create(array $transactions): PlainPaymentOperation;
 }
