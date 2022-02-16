@@ -7,12 +7,14 @@ use MetisFW\PayPal\Payment\BasePaymentOperation;
 
 require '../Helper/TransactionHelper.php';
 
-class DummyPaymentOperation extends BasePaymentOperation {
+class DummyPaymentOperation extends BasePaymentOperation
+{
 
   /**
    * @return array array of PayPal\Api\Transaction
    */
-  protected function getTransactions() {
+  protected function getTransactions()
+  {
     $item = TransactionHelper::createItem('Coffee', 'EUR', 2, '#123', 20);
     $itemList = TransactionHelper::createItemList(array($item));
     $details = TransactionHelper::createDetails(1, 2, 40);
@@ -22,5 +24,4 @@ class DummyPaymentOperation extends BasePaymentOperation {
     $transaction = TransactionHelper::createTransaction($amount, $itemList, $invoiceNumber, $description);
     return array($transaction);
   }
-
 }

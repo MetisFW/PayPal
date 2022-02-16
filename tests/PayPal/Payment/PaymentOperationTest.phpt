@@ -14,11 +14,12 @@ use PayPal\Payment\DummyPaymentOperation;
 use Tester\Assert;
 use Tester\TestCase;
 
-require_once __DIR__.'/../../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 require_once 'DummyPaymentOperation.php';
-require_once __DIR__.'/../Helper/TransactionHelper.php';
+require_once __DIR__ . '/../Helper/TransactionHelper.php';
 
-class PaymentOperationTest extends TestCase {
+class PaymentOperationTest extends TestCase
+{
 
   /** @var array */
   private $config;
@@ -31,7 +32,8 @@ class PaymentOperationTest extends TestCase {
    *
    * @return void
    */
-  protected function setUp() {
+  protected function setUp()
+  {
     parent::setUp();
     $this->config = array(
       'clientId' => 'AUqne4ywvozUaSQ1THTZYKFr88bhtA0SS_fXBoJTfeSTIasDBWuXLiLcFlfmSXRfL-kZ3Z5shvNrT6rP',
@@ -39,7 +41,8 @@ class PaymentOperationTest extends TestCase {
     );
   }
 
-  public function testGetPayment() {
+  public function testGetPayment()
+  {
     $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array());
     $context = new PayPalContext($apiContext);
     $operation = new DummyPaymentOperation($context);
@@ -48,7 +51,8 @@ class PaymentOperationTest extends TestCase {
     Assert::equal('123456789', $payment->transactions[0]->invoice_number);
   }
 
-  public function testCreatePayment() {
+  public function testCreatePayment()
+  {
     $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
     $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
     $context = new PayPalContext($apiContext);
@@ -66,7 +70,8 @@ class PaymentOperationTest extends TestCase {
     Assert::notEqual(null, $result->getApprovalLink());
   }
 
-  public function testCreatePaymentGaTracking() {
+  public function testCreatePaymentGaTracking()
+  {
     $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
     $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
     $context = new PayPalContext($apiContext);
@@ -86,7 +91,8 @@ class PaymentOperationTest extends TestCase {
     Assert::notEqual(null, $result->getApprovalLink());
   }
 
-  public function testCreatePaymentSimpleOperation() {
+  public function testCreatePaymentSimpleOperation()
+  {
     $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
     $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
     $context = new PayPalContext($apiContext);
@@ -104,7 +110,8 @@ class PaymentOperationTest extends TestCase {
     Assert::notEqual(null, $result->getApprovalLink());
   }
 
-  public function testCreatePaymentPlainPaymentOperation() {
+  public function testCreatePaymentPlainPaymentOperation()
+  {
     $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
     $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
     $context = new PayPalContext($apiContext);
@@ -137,13 +144,11 @@ class PaymentOperationTest extends TestCase {
    *
    * @return void
    */
-  protected function tearDown() {
+  protected function tearDown()
+  {
     parent::tearDown();
     \Mockery::close();
   }
-
 }
 
 \run(new PaymentOperationTest());
-
-

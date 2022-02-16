@@ -8,7 +8,8 @@ use PayPal\Api\Item;
 use PayPal\Api\ItemList;
 use PayPal\Api\Transaction;
 
-class TransactionHelper {
+class TransactionHelper
+{
 
   /**
    * @param Amount $amount
@@ -18,7 +19,8 @@ class TransactionHelper {
    *
    * @return Transaction
    */
-  static public function createTransaction(Amount $amount, ItemList $itemLists, $invoiceNumber, $description) {
+  static public function createTransaction(Amount $amount, ItemList $itemLists, $invoiceNumber, $description)
+  {
     $transaction = new Transaction();
     $transaction->setAmount($amount);
     $transaction->setItemList($itemLists);
@@ -34,7 +36,8 @@ class TransactionHelper {
    *
    * @return Amount
    */
-  static public function createAmount(Details $details, $total, $currency) {
+  static public function createAmount(Details $details, $total, $currency)
+  {
     $amount = new Amount();
     $amount->setCurrency($currency);
     $amount->setTotal($total);
@@ -49,7 +52,8 @@ class TransactionHelper {
    *
    * @return Details
    */
-  static public function createDetails($shippingPrice, $taxPrice, $subtotal) {
+  static public function createDetails($shippingPrice, $taxPrice, $subtotal)
+  {
     $details = new Details();
     $details->setShipping($shippingPrice);
     $details->setTax($taxPrice);
@@ -63,7 +67,8 @@ class TransactionHelper {
    *
    * @return ItemList
    */
-  static public function createItemList(array $items) {
+  static public function createItemList(array $items)
+  {
     $itemList = new ItemList();
     $itemList->setItems($items);
     return $itemList;
@@ -77,7 +82,8 @@ class TransactionHelper {
    * @param int $price
    * @return Item
    */
-  static public function createItem($name, $currency, $quantity, $sku, $price) {
+  static public function createItem($name, $currency, $quantity, $sku, $price)
+  {
     $item = new Item();
     $item->setName($name);
     $item->setCurrency($currency);

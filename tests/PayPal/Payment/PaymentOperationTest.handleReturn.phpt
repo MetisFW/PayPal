@@ -10,10 +10,11 @@ use PayPal\Rest\ApiContext;
 use Tester\Assert;
 use Tester\TestCase;
 
-require_once __DIR__.'/../../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 require_once 'DummyPaymentOperation.php';
 
-class PaymentOperationHandleReturnTest extends TestCase {
+class PaymentOperationHandleReturnTest extends TestCase
+{
 
   /** @var array */
   private $config;
@@ -23,7 +24,8 @@ class PaymentOperationHandleReturnTest extends TestCase {
    *
    * @return void
    */
-  protected function setUp() {
+  protected function setUp()
+  {
     parent::setUp();
     $this->config = array(
       'clientId' => 'AUqne4ywvozUaSQ1THTZYKFr88bhtA0SS_fXBoJTfeSTIasDBWuXLiLcFlfmSXRfL-kZ3Z5shvNrT6rP',
@@ -31,13 +33,15 @@ class PaymentOperationHandleReturnTest extends TestCase {
     );
   }
 
-  public function testHandleReturn() {
+  public function testHandleReturn()
+  {
     $credentials = new OAuthTokenCredential($this->config['clientId'], $this->config['secretId']);
     $apiContext = \Mockery::mock('\PayPal\Rest\ApiContext', array($credentials))->makePartial();
 
     $context = new PayPalContext($apiContext);
     $operation = new DummyPaymentOperation(
-      $context);
+      $context
+    );
 
     $paymentId = "123456";
     $payerId = "john.doe";
@@ -66,11 +70,11 @@ class PaymentOperationHandleReturnTest extends TestCase {
    *
    * @return void
    */
-  protected function tearDown() {
+  protected function tearDown()
+  {
     parent::tearDown();
     \Mockery::close();
   }
-
 }
 
 \run(new PaymentOperationHandleReturnTest());

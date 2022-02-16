@@ -8,9 +8,10 @@ use PayPal\Api\Payment;
 use Tester\Assert;
 use Tester\TestCase;
 
-require_once __DIR__.'/../../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 
-class PaymentControlTest extends TestCase {
+class PaymentControlTest extends TestCase
+{
 
   /**
    * @var MockInterface
@@ -22,18 +23,21 @@ class PaymentControlTest extends TestCase {
    */
   private $control;
 
-  public function setUp() {
+  public function setUp()
+  {
     parent::setUp();
 
     $this->operationMock = \Mockery::mock('\MetisFW\PayPal\Payment\PaymentOperation');
     $this->control = \Mockery::mock(
       '\MetisFW\PayPal\UI\PaymentControl',
-      array($this->operationMock))
+      array($this->operationMock)
+    )
       ->makePartial()
       ->shouldAllowMockingProtectedMethods();
   }
 
-  public function testCheckout() {
+  public function testCheckout()
+  {
     $plainPayment = new Payment();
     $this->operationMock->shouldReceive('getPayment')->andReturn($plainPayment);
 
@@ -50,7 +54,8 @@ class PaymentControlTest extends TestCase {
     Assert::true(true);
   }
 
-  public function testHandleReturn() {
+  public function testHandleReturn()
+  {
     $paymentId = "123456";
     $payerId = "654321";
     $this->control->shouldReceive('getPresenter->getParameter')->with('paymentId')->andReturn($paymentId);
@@ -61,13 +66,15 @@ class PaymentControlTest extends TestCase {
     $this->control->handleReturn($paymentId, $payerId);
   }
 
-  public function testHandleCancel() {
+  public function testHandleCancel()
+  {
     $this->operationMock->shouldReceive('handleCancel');
     $this->control->shouldReceive('onCancel');
     $this->control->handleCancel();
   }
 
-  public function testSetup() {
+  public function testSetup()
+  {
     Assert::same($this->control->getTemplateFilePath(), $this->control->getDefaultTemplateFilePath());
     $templateFilePath = '/foo/path.latte';
     $this->control->setTemplateFilePath($templateFilePath);
@@ -79,12 +86,11 @@ class PaymentControlTest extends TestCase {
    *
    * @return void
    */
-  protected function tearDown() {
+  protected function tearDown()
+  {
     parent::tearDown();
     \Mockery::close();
   }
-
 }
 
 run(new PaymentControlTest());
-
