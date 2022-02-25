@@ -40,7 +40,7 @@ class PayPalExtension extends CompilerExtension
     }
   }
 
-  public static function register(Configurator $configurator) {
+  public static function register(Configurator $configurator) : void {
     $configurator->onCompile[] = function ($config, Compiler $compiler) {
       $compiler->addExtension('payPal', new PayPalExtension());
     };

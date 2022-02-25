@@ -12,6 +12,6 @@ interface SimplePaymentOperationFactory {
    *
    * @return SimplePaymentOperation
    */
-  public function create($name, $price, $quantity = 1, $currency = null);
+  public function create(string $name, $price, int $quantity = 1, string $currency = null) : SimplePaymentOperation;
 
 }

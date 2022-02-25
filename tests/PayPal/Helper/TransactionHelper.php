@@ -59,7 +59,7 @@ class TransactionHelper {
   }
 
   /**
-   * @param array $items
+   * @param Item[] $items
    *
    * @return ItemList
    */

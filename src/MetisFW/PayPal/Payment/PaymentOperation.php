@@ -8,19 +8,13 @@ interface PaymentOperation {
 
   /**
    * Create paypal payment
-   *
-   * @return Payment
    */
-  public function getPayment();
+  public function getPayment() : Payment;
 
   /**
    * Execute payment api call
-   *
-   * @param Payment $payment
-   *
-   * @return Payment
    */
-  public function createPayment(Payment $payment);
+  public function createPayment(Payment $payment) : Payment;
 
   /**
    * @param string $paymentId
@@ -28,11 +22,11 @@ interface PaymentOperation {
    *
    * @return Payment
    */
-  public function handleReturn($paymentId, $payerId);
+  public function handleReturn(string $paymentId, string $payerId) : Payment;
 
   /**
    * @return void
    */
-  public function handleCancel();
+  public function handleCancel() : void;
 
 }

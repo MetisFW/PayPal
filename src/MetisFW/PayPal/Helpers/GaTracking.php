@@ -14,7 +14,7 @@ class GaTracking {
     // nothing
   }
 
-  public static function addTrackingParameters(Payment $payment) {
+  public static function addTrackingParameters(Payment $payment) : Payment {
     $redirectUrls = $payment->getRedirectUrls();
 
     $url = new Url($redirectUrls->getReturnUrl());
