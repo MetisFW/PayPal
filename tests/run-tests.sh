@@ -9,4 +9,4 @@ else
   runTests=$dir
 fi
 
-$dir/../vendor/bin/tester -p php -c $dir/php.ini-unix $runTests $@
+$dir/../vendor/bin/tester -p php -C $runTests $@

@@ -47,7 +47,7 @@ class SimplePaymentOperation extends BasePaymentOperation {
     $payPalItem = new Item();
     $payPalItem->setName($this->name);
     $payPalItem->setCurrency($currency);
-    $payPalItem->setQuantity($this->quantity);
+    $payPalItem->setQuantity((string)$this->quantity);
     $payPalItem->setPrice($this->price);
 
     $payPalItems[] = $payPalItem;

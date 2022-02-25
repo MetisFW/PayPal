@@ -60,6 +60,7 @@ abstract class BasePaymentOperation implements PaymentOperation {
    */
   public function getPayment() {
     $payer = $this->getPayer();
+    /** @phpstan-ignore-next-line */
     if(!$payer || !($payer instanceof Payer)) {
       throw new InvalidArgumentException("Method getPayer has to return instance of Payer. Instead ".
         gettype($payer)." given.");
@@ -106,7 +107,7 @@ abstract class BasePaymentOperation implements PaymentOperation {
    * @param string $paymentId
    * @param string $payerId
    *
-   * @return void
+   * @return Payment
    */
   public function handleReturn($paymentId, $payerId) {
     try {

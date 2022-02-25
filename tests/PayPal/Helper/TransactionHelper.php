@@ -71,7 +71,7 @@ class TransactionHelper {
 
   /**
    * @param string $name
-   * @param int $currency
+   * @param string $currency
    * @param int $quantity
    * @param string $sku
    * @param int $price
@@ -81,7 +81,7 @@ class TransactionHelper {
     $item = new Item();
     $item->setName($name);
     $item->setCurrency($currency);
-    $item->setQuantity($quantity);
+    $item->setQuantity((string)$quantity);
     $item->setSku($sku);
     $item->setPrice($price);
     return $item;

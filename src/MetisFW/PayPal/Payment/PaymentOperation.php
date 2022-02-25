@@ -26,7 +26,7 @@ interface PaymentOperation {
    * @param string $paymentId
    * @param string $payerId
    *
-   * @return void
+   * @return Payment
    */
   public function handleReturn($paymentId, $payerId);
 

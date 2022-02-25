@@ -22,8 +22,7 @@ class PayPalContext {
   private $experienceProfileId;
 
   /**
-   * @param string $clientId
-   * @param string $secret
+   * @param ApiContext $apiContext
    */
   public function __construct(ApiContext $apiContext) {
     $this->apiContext = $apiContext;
