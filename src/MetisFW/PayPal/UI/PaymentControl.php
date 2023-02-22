@@ -106,8 +106,12 @@ class PaymentControl extends Control {
    */
   public function render(array $attrs = [], string $text = "Pay") {
     $template = $this->template;
-    $templateFilePath = $this->getTemplateFilePath();
-    $template->setFile($templateFilePath);
+    if($this->templateFilePath) {
+      /** @phpstan-latte-ignore */
+      $template->setFile($this->templateFilePath);
+    } else {
+      $template->setFile($this->getDefaultTemplateFilePath());
+    }
     $template->checkoutLink = $this->link('//checkout!');
     $template->text = $text;
     $template->attrs = $attrs;
